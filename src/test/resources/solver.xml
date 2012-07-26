@@ -1,0 +1,13 @@
+<settings>
+    <waitTimeInSeconds>30</waitTimeInSeconds>
+    <accounts>
+        <account>
+            <email>account1@test.com</email>
+            <password>password</password>
+        </account>
+        <account>
+            <email>account2@test.com</email>
+            <password>anotherPassword</password>
+        </account>
+    </accounts>
+</settings>

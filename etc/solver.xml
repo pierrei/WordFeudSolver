@@ -1,0 +1,16 @@
+<settings>
+    <waitTimeInSeconds>30</waitTimeInSeconds>
+    <calculator>com.package.WFCalculatorImpl</calculator>
+    <accounts>
+        <!--
+        <account>
+            <email>a.account@email.com</email>
+            <password>password</password>
+        </account>
+        <account>
+            <email>another.account@email.com</email>
+            <password>password</password>
+        </account>
+        -->
+    </accounts>
+</settings>
