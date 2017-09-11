@@ -52,15 +52,15 @@ public enum ChatCommand {
                 }
             }
 
-            status.append(activeGames).append(" running games (").append(gamesInLead).append(" in lead), ").append(finishedGames).append(" finished (");
+            status.append(activeGames).append(" running games (").append(gamesInLead).append(" in lead), ").append(finishedGames).append(" finished; ");
 
             if (gamesLost > 0) {
                 status.append("won ").append(finishedGames - gamesLost).append(", ");
-                status.append("lost to ").append(lostTo);
+                status.append("lost ").append(gamesLost).append(" (to ").append(lostTo).append(")");
             } else {
                 status.append("won all!");
             }
-            status.append(").");
+            status.append(".");
 
             return status.toString();
         }
