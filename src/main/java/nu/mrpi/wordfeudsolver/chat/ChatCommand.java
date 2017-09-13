@@ -4,9 +4,7 @@ import nu.mrpi.wordfeudapi.WordFeudClient;
 import nu.mrpi.wordfeudapi.domain.BoardType;
 import nu.mrpi.wordfeudapi.domain.Game;
 import nu.mrpi.wordfeudapi.domain.RuleSet;
-import nu.mrpi.wordfeudsolver.domain.Difficulty;
-import nu.mrpi.wordfeudsolver.domain.GameInfo;
-import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
+import nu.mrpi.wordfeudsolver.chat.commands.DifficultyCommand;
 
 /**
  * @author Pierre Ingmansson
@@ -110,46 +108,12 @@ public enum ChatCommand {
         }
     }),
 
-    Difficulty(false, new Command() {
-        @Override
-        public void executeCommand(CommandData data) {
-            WordFeudClient client = data.getClient();
+    Difficulty(false, new DifficultyCommand()),
 
-            Difficulty difficulty = parseDifficulty(data);
-
-            if (difficulty != null) {
-                Game game = client.getGame(data.getGameId());
-
-                data.getGameService().setGameDifficulty(game, difficulty);
-
-                client.chat(data.getGameId(), "Difficulty was set to " + difficulty.toString().toLowerCase());
-            } else {
-                try {
-                    GameInfo gameInfo = data.getGameService().getGameInfo(data.getGameId());
-
-                    client.chat(data.getGameId(), "Difficulty level for this game is set to " + gameInfo.getDifficulty().toString().toLowerCase());
-                } catch (GameNotFoundException e) {
-                    // Do nothing
-                }
-            }
-        }
-
-        private Difficulty parseDifficulty(CommandData data) {
-            Difficulty difficulty = null;
-
-            String receivedData = data.getMessage().toLowerCase();
-            if (receivedData.endsWith("easy")) {
-                difficulty = nu.mrpi.wordfeudsolver.domain.Difficulty.EASY;
-            } else if (receivedData.endsWith("medium")) {
-                difficulty = nu.mrpi.wordfeudsolver.domain.Difficulty.MEDIUM;
-            } else if (receivedData.endsWith("hard")) {
-                difficulty = nu.mrpi.wordfeudsolver.domain.Difficulty.HARD;
-            } else if (receivedData.endsWith("nightmare")) {
-                difficulty = nu.mrpi.wordfeudsolver.domain.Difficulty.NIGHTMARE;
-            }
-            return difficulty;
-        }
-    });
+    Easy(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.EASY)),
+    Medium(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.MEDIUM)),
+    Hard(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.HARD)),
+    Nightmare(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.NIGHTMARE));
 
     private final boolean adminCommand;
     private final Command command;
