@@ -58,7 +58,7 @@ public class WordFeudSolverMain {
         }
 
         for (WFAccount account : accounts) {
-            workers.add(new AccountWorker(account, gameService, calculator, messageStore));
+            workers.add(new AccountWorker(account, gameService, calculator, messageStore, settingsService));
         }
 
         return new WorkManager(workers);

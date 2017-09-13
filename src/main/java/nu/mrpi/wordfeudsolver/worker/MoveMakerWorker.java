@@ -13,6 +13,7 @@ import nu.mrpi.wordfeudapi.domain.TileMove;
 import nu.mrpi.wordfeudapi.exception.WordFeudException;
 import nu.mrpi.wordfeudsolver.chat.MessageStore;
 import nu.mrpi.wordfeudsolver.service.GameService;
+import nu.mrpi.wordfeudsolver.service.SettingsService;
 import nu.mrpi.wordfeudsolver.solver.Solver;
 
 /**
@@ -26,12 +27,14 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
     private final Solver solver;
     private final MessageStore messageStore;
     private final GameService gameService;
+    private final SettingsService settingsService;
 
-    public MoveMakerWorker(WordFeudClient wordFeudClient, Solver solver, MessageStore messageStore, GameService gameService) {
+    public MoveMakerWorker(WordFeudClient wordFeudClient, Solver solver, MessageStore messageStore, GameService gameService, SettingsService settingsService) {
         this.wordFeudClient = wordFeudClient;
         this.solver = solver;
         this.messageStore = messageStore;
         this.gameService = gameService;
+        this.settingsService = settingsService;
     }
 
     @Override
@@ -107,7 +110,7 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
     }
 
     private void actOnPoints(final Game game, final int points) {
-        if (points >= POINT_BRAG_LIMIT) {
+        if (points >= POINT_BRAG_LIMIT && settingsService.shouldSendBragMessages()) {
             final String message = messageStore.getRandomBragMessage(game.getLanguageLocale());
 
             log.info(game, "Sending brag message \"" + message + "\" to " + game.getOpponent().getUsername());

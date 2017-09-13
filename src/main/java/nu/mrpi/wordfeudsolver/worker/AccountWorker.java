@@ -10,6 +10,7 @@ import nu.mrpi.wordfeudsolver.chat.ChatWorker;
 import nu.mrpi.wordfeudsolver.chat.MessageStore;
 import nu.mrpi.wordfeudsolver.domain.WFAccount;
 import nu.mrpi.wordfeudsolver.service.GameService;
+import nu.mrpi.wordfeudsolver.service.SettingsService;
 import nu.mrpi.wordfeudsolver.solver.GameDifficultyCompositeSolver;
 import nu.mrpi.wordfeudsolver.solver.Solver;
 import nu.mrpi.wordfeudsolver.solver.calculator.WFCalculator;
@@ -24,15 +25,15 @@ public class AccountWorker extends AbstractWorker implements Worker {
 
     private boolean firstRun = true;
 
-    public AccountWorker(WFAccount account, GameService gameService, WFCalculator calculator, MessageStore messageStore) {
+    public AccountWorker(WFAccount account, GameService gameService, WFCalculator calculator, MessageStore messageStore, SettingsService settingsService) {
         this.account = account;
 
-        final ChatWorker chatWorker = new ChatWorker(client, gameService);
+        final ChatWorker chatWorker = new ChatWorker(client, gameService, messageStore);
 
         final Solver solver = new GameDifficultyCompositeSolver(gameService, calculator);
 
         workers = Arrays.asList(new InvitationsWorker(client, calculator, messageStore), new NotificationsWorker(client, chatWorker),
-                                new MoveMakerWorker(client, solver, messageStore, gameService));
+                                new MoveMakerWorker(client, solver, messageStore, gameService, settingsService));
     }
 
     @Override

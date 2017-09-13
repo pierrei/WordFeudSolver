@@ -61,4 +61,8 @@ public class SettingsService {
             throw new RuntimeException("Could not find calculator class: " + className);
         }
     }
+
+    public boolean shouldSendBragMessages() {
+        return config.getBoolean("sendBragMessages");
+    }
 }
