@@ -16,6 +16,10 @@ public class MessageStore {
 
     public static final String BUNDLE = "chat";
 
+    public String getChatCommand(final Locale locale, final String command) {
+        return getString(locale, "chat.command." + command);
+    }
+
     public String getRandomBragMessage(final Locale locale) {
         return getString(locale, "brag." + random(1, 3));
     }

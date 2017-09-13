@@ -8,6 +8,9 @@ import nu.mrpi.wordfeudapi.WordFeudClient;
 import nu.mrpi.wordfeudsolver.log.GameLogger;
 import nu.mrpi.wordfeudsolver.service.GameService;
 
+import java.util.Locale;
+import java.util.MissingResourceException;
+
 /**
  * @author Pierre Ingmansson
  */
@@ -27,9 +30,10 @@ public class ChatWorker {
 
     public void processChatMessage(final int gameId, final String fromUsername, final String message) {
         boolean chatMessageProcessed = false;
+        Game game = wordFeudClient.getGame(gameId);
 
         for (final ChatCommand chatCommand : ChatCommand.values()) {
-            if (messageMatchesCommand(message, chatCommand) && verifyAccess(fromUsername, chatCommand)) {
+            if (messageMatchesCommand(game.getLanguageLocale(), message, chatCommand) && verifyAccess(fromUsername, chatCommand)) {
                 log.info(gameId, "Responding to chat message \"" + message + "\" using command \"" + chatCommand + "\"");
 
                 chatCommand.executeCommand(new CommandData(wordFeudClient, gameService, messageStore, gameId, fromUsername, message));
@@ -46,7 +50,17 @@ public class ChatWorker {
         return !chatCommand.isAdminCommand() || ADMIN_USER.equals(fromUsername);
     }
 
-    private boolean messageMatchesCommand(final String message, final ChatCommand chatCommand) {
-        return message.toLowerCase().startsWith(chatCommand.toString().toLowerCase());
+    private boolean messageMatchesCommand(final Locale locale, final String message, final ChatCommand chatCommand) {
+        String commandReceived = message.toLowerCase().replace("\"", "");
+
+        String command = chatCommand.toString().toLowerCase();
+        String translatedChatCommand = command;
+        try {
+            translatedChatCommand = messageStore.getChatCommand(locale, command);
+        } catch (MissingResourceException e) {
+            // Ignore
+        }
+
+        return commandReceived.startsWith(command) || commandReceived.startsWith(translatedChatCommand);
     }
 }
