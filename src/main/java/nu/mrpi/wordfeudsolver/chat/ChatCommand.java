@@ -83,7 +83,9 @@ public enum ChatCommand {
                         boardType = BoardType.fromString(tokens[3]);
                     }
 
-                    client.invite(tokens[1], ruleSet, boardType);
+                    String username = tokens[1];
+                    client.invite(username, ruleSet, boardType);
+                    client.chat(data.getGameId(), "Invite to " + username + " sent!");
                 } catch (Exception e) {
                     sendInstructions(data, client);
                 }
