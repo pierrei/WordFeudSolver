@@ -9,13 +9,15 @@ import nu.mrpi.wordfeudsolver.service.GameService;
 public class CommandData {
     private final WordFeudClient client;
     private final GameService gameService;
+    private final MessageStore messageStore;
     private final int gameId;
     private final String fromUsername;
     private final String message;
 
-    public CommandData(final WordFeudClient client, GameService gameService, final int gameId, final String fromUsername, final String message) {
+    public CommandData(final WordFeudClient client, GameService gameService, MessageStore messageStore, final int gameId, final String fromUsername, final String message) {
         this.client = client;
         this.gameService = gameService;
+        this.messageStore = messageStore;
         this.gameId = gameId;
         this.fromUsername = fromUsername;
         this.message = message;
@@ -27,6 +29,10 @@ public class CommandData {
 
     public GameService getGameService() {
         return gameService;
+    }
+
+    public MessageStore getMessageStore() {
+        return messageStore;
     }
 
     public int getGameId() {

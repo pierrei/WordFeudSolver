@@ -2,6 +2,7 @@ package nu.mrpi.wordfeudsolver.chat;
 
 import static nu.mrpi.util.MathUtil.random;
 
+import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -19,12 +20,20 @@ public class MessageStore {
         return getString(locale, "brag." + random(1, 3));
     }
 
+    public String getHelp(final Locale locale) {
+        return getString(locale, "help");
+    }
+
     public String getGreeting(final Locale locale, final String username) {
         return getString(locale, "greeting.nightmare", username);
     }
 
     public static String getString(final Locale locale, final String key) {
-        return ResourceBundle.getBundle(BUNDLE, locale).getString(key);
+        try {
+            return new String(ResourceBundle.getBundle(BUNDLE, locale).getString(key).getBytes("ISO-8859-1"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return ResourceBundle.getBundle(BUNDLE, locale).getString(key);
+        }
     }
 
     public static String getString(final Locale locale, final String key, final Object... params) {

@@ -12,6 +12,17 @@ import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
  * @author Pierre Ingmansson
  */
 public enum ChatCommand {
+    Help(false, new Command() {
+        @Override
+        public void executeCommand(CommandData data) {
+            WordFeudClient client = data.getClient();
+            MessageStore messageStore = data.getMessageStore();
+
+            Game game = data.getClient().getGame(data.getGameId());
+
+            client.chat(data.getGameId(), messageStore.getHelp(game.getLanguageLocale()));
+        }
+    }),
     Status(true, new Command() {
         public void executeCommand(final CommandData data) {
             final WordFeudClient client = data.getClient();
