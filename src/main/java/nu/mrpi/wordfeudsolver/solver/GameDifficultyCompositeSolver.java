@@ -26,9 +26,9 @@ public class GameDifficultyCompositeSolver implements Solver {
         this.gameService = gameService;
 
         solverMap.put(Difficulty.EASY, solver(calculator).pointLimit(20).randomize());
-        solverMap.put(Difficulty.MEDIUM, solver(calculator).pointLimit(30).topPercent(90).randomize());
-        solverMap.put(Difficulty.HARD, solver(calculator).pointLimit(50).topPercent(70).randomize());
-        solverMap.put(Difficulty.NIGHTMARE, solver(calculator).sortHighestFirst());
+        solverMap.put(Difficulty.MEDIUM, solver(calculator).pointLimit(30).topPercent(50).randomize());
+        solverMap.put(Difficulty.HARD, solver(calculator).pointLimit(50).topPercent(30).randomize());
+        solverMap.put(Difficulty.NIGHTMARE, solver(calculator));
     }
 
     @Override

@@ -35,7 +35,7 @@ public class SolverBuilderTest extends AbstractSolverTest<FilterBuilder.OngoingS
 
     @Test
     public void testTopPercentAndPointLimit() throws Exception {
-        this.solver = this.solver.topPercent(50).pointLimit(10).sortHighestFirst();
+        this.solver = this.solver.topPercent(50).pointLimit(10);
 
         List<TileMove> solve = solver.solve(createGame(), createBoard());
 

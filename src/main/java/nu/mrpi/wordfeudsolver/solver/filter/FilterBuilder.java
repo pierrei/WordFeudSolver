@@ -41,11 +41,6 @@ public class FilterBuilder {
             return this;
         }
 
-        public OngoingSolverBuilder sortHighestFirst() {
-            filters.add(HighestScoreFilter.INSTANCE);
-            return this;
-        }
-
         public OngoingSolverBuilder topPercent(int topPercent) {
             filters.add(new TopPercentFilter(topPercent));
             return this;
