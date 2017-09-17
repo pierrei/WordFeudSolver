@@ -38,7 +38,7 @@ public class AccountWorker extends AbstractWorker implements Worker {
 
     @Override
     public void doWork() {
-        log.info("Starting to work for account " + account.getEmail());
+        log.debug("Starting to work for account " + account.getEmail());
 
         checkFirstRun();
 
