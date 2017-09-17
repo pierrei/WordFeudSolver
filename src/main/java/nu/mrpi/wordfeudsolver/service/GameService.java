@@ -7,7 +7,7 @@ import nu.mrpi.wordfeudsolver.persistance.GameDAO;
 import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
 
 /**
- * @author Pierre Ingmansson (pierre.ingmansson@wirelesscar.biz)
+ * @author Pierre Ingmansson
  */
 public class GameService {
     private GameDAO gameDAO;

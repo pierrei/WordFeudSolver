@@ -1,7 +1,7 @@
 package nu.mrpi.wordfeudsolver.domain;
 
 /**
- * @author Pierre Ingmansson (pierre.ingmansson@wirelesscar.biz)
+ * @author Pierre Ingmansson
  */
 public enum Difficulty {
     EASY, MEDIUM, HARD, NIGHTMARE;

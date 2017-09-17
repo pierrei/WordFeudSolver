@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * @author Pierre Ingmansson (pierre.ingmansson@wirelesscar.biz)
+ * @author Pierre Ingmansson
  */
 public class GameInfoTest {
     @Test

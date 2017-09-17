@@ -10,7 +10,7 @@ import nu.mrpi.wordfeudsolver.domain.Difficulty;
 import nu.mrpi.wordfeudsolver.domain.GameInfo;
 
 /**
- * @author Pierre Ingmansson (pierre.ingmansson@wirelesscar.biz)
+ * @author Pierre Ingmansson
  */
 public class GameDAORedisTest {
 

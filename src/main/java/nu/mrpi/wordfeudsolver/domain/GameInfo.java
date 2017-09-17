@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import nu.mrpi.wordfeudapi.domain.Game;
 
 /**
- * @author Pierre Ingmansson (pierre.ingmansson@wirelesscar.biz)
+ * @author Pierre Ingmansson
  */
 public class GameInfo {
     private Difficulty difficulty = Difficulty.HARD;

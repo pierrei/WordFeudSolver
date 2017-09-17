@@ -6,7 +6,7 @@ import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
 import redis.clients.jedis.Jedis;
 
 /**
- * @author Pierre Ingmansson (pierre.ingmansson@wirelesscar.biz)
+ * @author Pierre Ingmansson
  */
 public class GameDAORedis implements GameDAO {
     private static final String GAME_INFO_PREFIX = "gameinfo.";
