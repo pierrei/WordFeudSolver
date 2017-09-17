@@ -43,4 +43,12 @@ public class GameService {
     public GameInfo getGameInfo(Game game) throws GameNotFoundException {
         return getGameInfo(game.getId());
     }
+
+    public boolean isGameDifficultySet(Game game) {
+        try {
+            return getGameInfo(game).getDifficulty() != null;
+        } catch (GameNotFoundException e) {
+            return false;
+        }
+    }
 }

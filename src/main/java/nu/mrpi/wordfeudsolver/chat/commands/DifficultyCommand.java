@@ -8,6 +8,7 @@ import nu.mrpi.wordfeudsolver.chat.MessageStore;
 import nu.mrpi.wordfeudsolver.domain.Difficulty;
 import nu.mrpi.wordfeudsolver.domain.GameInfo;
 import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
+import nu.mrpi.wordfeudsolver.service.GameService;
 
 public class DifficultyCommand implements Command {
     @Override
@@ -35,10 +36,16 @@ public class DifficultyCommand implements Command {
         WordFeudClient client = data.getClient();
         Game game = data.getGame();
         MessageStore messageStore = data.getMessageStore();
+        GameService gameService = data.getGameService();
 
-        data.getGameService().setGameDifficulty(game, difficulty);
+        boolean wasDifficultySet = gameService.isGameDifficultySet(game);
 
-        client.chat(data.getGameId(), messageStore.getDifficultySetToMessage(game.getLanguageLocale(), difficulty));
+        gameService.setGameDifficulty(game, difficulty);
+
+        if (wasDifficultySet)
+            client.chat(data.getGameId(), messageStore.getDifficultySetMessage(game.getLanguageLocale(), difficulty));
+        else
+            client.chat(data.getGameId(), messageStore.getInitialDifficultySetMessage(game.getLanguageLocale(), difficulty));
     }
 
     private Difficulty parseDifficulty(CommandData data) {

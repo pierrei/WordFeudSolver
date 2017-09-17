@@ -38,8 +38,12 @@ public class MessageStore {
         return getString(locale, "chat.command." + difficulty.toString().toLowerCase());
     }
 
-    public String getDifficultySetToMessage(Locale locale, Difficulty difficulty) {
+    public String getDifficultySetMessage(Locale locale, Difficulty difficulty) {
         return getString(locale, "chat.response.difficulty_set", getLocalizedDifficulty(locale, difficulty));
+    }
+
+    public String getInitialDifficultySetMessage(Locale locale, Difficulty difficulty) {
+        return getString(locale, "chat.response.initial_difficulty_set", getLocalizedDifficulty(locale, difficulty));
     }
 
     public String getDifficultyLevelMessage(final Locale locale, Difficulty difficulty) {

@@ -8,7 +8,7 @@ import nu.mrpi.wordfeudapi.domain.Game;
  * @author Pierre Ingmansson
  */
 public class GameInfo {
-    private Difficulty difficulty = Difficulty.HARD;
+    private Difficulty difficulty;
     private String opponent;
     private int botScore;
     private int opponentScore;

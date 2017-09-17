@@ -12,6 +12,8 @@ import nu.mrpi.wordfeudapi.domain.Tile;
 import nu.mrpi.wordfeudapi.domain.TileMove;
 import nu.mrpi.wordfeudapi.exception.WordFeudException;
 import nu.mrpi.wordfeudsolver.chat.MessageStore;
+import nu.mrpi.wordfeudsolver.domain.Difficulty;
+import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
 import nu.mrpi.wordfeudsolver.service.GameService;
 import nu.mrpi.wordfeudsolver.service.SettingsService;
 import nu.mrpi.wordfeudsolver.solver.Solver;
@@ -42,7 +44,7 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
         boolean noGamesWithMyTurn = true;
 
         for (final Game game : wordFeudClient.getGames()) {
-            if (game.isMyTurn()) {
+            if (game.isMyTurn() && gameService.isGameDifficultySet(game)) {
                 final Game gameWithTiles = wordFeudClient.getGame(game.getId());
                 final Board board = wordFeudClient.getBoard(gameWithTiles);
 
