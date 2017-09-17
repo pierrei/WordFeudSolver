@@ -17,8 +17,29 @@ public class GameService {
     }
 
     public void setGameDifficulty(final Game game, final Difficulty difficulty) {
-        GameInfo gameInfo = new GameInfo(game);
-        gameInfo.setDifficulty(difficulty);
+        GameInfo gameInfo;
+        try {
+            gameInfo = gameDAO.getGameInfo(game.getId());
+
+            gameInfo.setDifficulty(difficulty);
+        } catch (GameNotFoundException e) {
+            gameInfo = new GameInfo(game);
+            gameInfo.setDifficulty(difficulty);
+        }
+
+        gameDAO.updateGameInfo(gameInfo);
+    }
+
+    public void surrender(final Game game) {
+        GameInfo gameInfo;
+        try {
+            gameInfo = gameDAO.getGameInfo(game.getId());
+
+            gameInfo.setSurrender(true);
+        } catch (GameNotFoundException e) {
+            gameInfo = new GameInfo(game);
+            gameInfo.setSurrender(true);
+        }
 
         gameDAO.updateGameInfo(gameInfo);
     }

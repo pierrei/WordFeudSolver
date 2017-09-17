@@ -13,6 +13,7 @@ public class GameInfo {
     private int botScore;
     private int opponentScore;
     private long gameId;
+    private boolean surrender = false;
 
     public GameInfo() {
     }
@@ -34,6 +35,10 @@ public class GameInfo {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public boolean isDifficultySet() {
+        return this.difficulty != null;
     }
 
     public String getOpponent() {
@@ -68,6 +73,14 @@ public class GameInfo {
         this.gameId = gameId;
     }
 
+    public boolean isSurrender() {
+        return surrender;
+    }
+
+    public void setSurrender(boolean surrender) {
+        this.surrender = surrender;
+    }
+
     public static GameInfo fromJson(final String json) {
         return new Gson().fromJson(json, GameInfo.class);
     }
@@ -87,6 +100,7 @@ public class GameInfo {
                 gameId == gameInfo.gameId &&
                 opponentScore == gameInfo.opponentScore &&
                 difficulty == gameInfo.difficulty &&
+                surrender == gameInfo.surrender &&
                 opponent.equals(gameInfo.opponent);
 
     }
@@ -98,6 +112,7 @@ public class GameInfo {
         result = 31 * result + botScore;
         result = 31 * result + opponentScore;
         result = 31 * result + (int) (gameId ^ (gameId >>> 32));
+        result = 31 * result + (surrender ? 1 : 0);
         return result;
     }
 }

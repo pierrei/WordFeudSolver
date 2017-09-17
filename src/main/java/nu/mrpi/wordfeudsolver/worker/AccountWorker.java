@@ -32,7 +32,8 @@ public class AccountWorker extends AbstractWorker implements Worker {
 
         final Solver solver = new GameDifficultyCompositeSolver(gameService, calculator);
 
-        workers = Arrays.asList(new InvitationsWorker(client, calculator, messageStore), new NotificationsWorker(client, chatWorker),
+        workers = Arrays.asList(new InvitationsWorker(client, calculator, messageStore),
+                                new NotificationsWorker(client, chatWorker),
                                 new MoveMakerWorker(client, solver, messageStore, gameService, settingsService));
     }
 

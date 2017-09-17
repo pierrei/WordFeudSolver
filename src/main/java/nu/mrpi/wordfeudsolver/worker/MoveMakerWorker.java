@@ -13,6 +13,7 @@ import nu.mrpi.wordfeudapi.domain.TileMove;
 import nu.mrpi.wordfeudapi.exception.WordFeudException;
 import nu.mrpi.wordfeudsolver.chat.MessageStore;
 import nu.mrpi.wordfeudsolver.domain.Difficulty;
+import nu.mrpi.wordfeudsolver.domain.GameInfo;
 import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
 import nu.mrpi.wordfeudsolver.service.GameService;
 import nu.mrpi.wordfeudsolver.service.SettingsService;
@@ -44,13 +45,19 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
         boolean noGamesWithMyTurn = true;
 
         for (final Game game : wordFeudClient.getGames()) {
-            if (game.isMyTurn() && gameService.isGameDifficultySet(game)) {
-                final Game gameWithTiles = wordFeudClient.getGame(game.getId());
-                final Board board = wordFeudClient.getBoard(gameWithTiles);
+            GameInfo gameInfo = getGameInfo(game);
 
-                findAndPlaceSolution(gameWithTiles, board);
+            if (game.isMyTurn() && (gameInfo != null && gameInfo.isDifficultySet())) {
+                if (gameInfo.isSurrender()) {
+                    giveUp(game);
+                } else {
+                    final Game gameWithTiles = wordFeudClient.getGame(game.getId());
+                    final Board board = wordFeudClient.getBoard(gameWithTiles);
 
-                noGamesWithMyTurn = false;
+                    findAndPlaceSolution(gameWithTiles, board);
+
+                    noGamesWithMyTurn = false;
+                }
             }
 
             gameService.storeGameInfo(game);
@@ -59,6 +66,20 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
         if (noGamesWithMyTurn) {
             log.debug("No games found where it's my turn");
         }
+    }
+
+    private GameInfo getGameInfo(Game game) {
+        GameInfo gameInfo = null;
+        try {
+            gameInfo = gameService.getGameInfo(game);
+        } catch (GameNotFoundException ignored) {
+        }
+        return gameInfo;
+    }
+
+    private void giveUp(Game game) {
+        wordFeudClient.resign(game);
+        log.info(game, "Resigned game by request");
     }
 
     private void findAndPlaceSolution(final Game gameWithTiles, final Board board) {

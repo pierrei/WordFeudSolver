@@ -108,6 +108,13 @@ public enum ChatCommand {
         }
     }),
 
+    Surrender(true, new Command() {
+        @Override
+        public void executeCommand(CommandData data) {
+            data.getGameService().surrender(data.getGame());
+        }
+    }),
+
     Difficulty(false, new DifficultyCommand()),
 
     Easy(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.EASY)),
