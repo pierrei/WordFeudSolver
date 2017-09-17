@@ -1,6 +1,7 @@
 package nu.mrpi.wordfeudsolver.chat;
 
 import nu.mrpi.wordfeudapi.WordFeudClient;
+import nu.mrpi.wordfeudapi.domain.Game;
 import nu.mrpi.wordfeudsolver.service.GameService;
 
 /**
@@ -13,6 +14,7 @@ public class CommandData {
     private final int gameId;
     private final String fromUsername;
     private final String message;
+    private Game game = null;
 
     public CommandData(final WordFeudClient client, GameService gameService, MessageStore messageStore, final int gameId, final String fromUsername, final String message) {
         this.client = client;
@@ -45,5 +47,12 @@ public class CommandData {
 
     public String getMessage() {
         return message;
+    }
+
+    public Game getGame() {
+        if (game == null) {
+            game = client.getGame(gameId);
+        }
+        return game;
     }
 }

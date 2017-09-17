@@ -4,6 +4,7 @@ import nu.mrpi.wordfeudapi.WordFeudClient;
 import nu.mrpi.wordfeudapi.domain.Game;
 import nu.mrpi.wordfeudsolver.chat.Command;
 import nu.mrpi.wordfeudsolver.chat.CommandData;
+import nu.mrpi.wordfeudsolver.chat.MessageStore;
 import nu.mrpi.wordfeudsolver.domain.Difficulty;
 import nu.mrpi.wordfeudsolver.domain.GameInfo;
 import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
@@ -14,6 +15,8 @@ public class DifficultyCommand implements Command {
         WordFeudClient client = data.getClient();
 
         Difficulty difficulty = parseDifficulty(data);
+        MessageStore messageStore = data.getMessageStore();
+        Game game = data.getGame();
 
         if (difficulty != null) {
             setDifficulty(data, difficulty);
@@ -21,7 +24,7 @@ public class DifficultyCommand implements Command {
             try {
                 GameInfo gameInfo = data.getGameService().getGameInfo(data.getGameId());
 
-                client.chat(data.getGameId(), "Difficulty level for this game is set to " + gameInfo.getDifficulty().toString().toLowerCase());
+                client.chat(data.getGameId(), messageStore.getDifficultyLevelMessage(game.getLanguageLocale(), gameInfo.getDifficulty()));
             } catch (GameNotFoundException e) {
                 // Do nothing
             }
@@ -30,27 +33,25 @@ public class DifficultyCommand implements Command {
 
     protected void setDifficulty(CommandData data, Difficulty difficulty) {
         WordFeudClient client = data.getClient();
-        Game game = client.getGame(data.getGameId());
+        Game game = data.getGame();
+        MessageStore messageStore = data.getMessageStore();
 
         data.getGameService().setGameDifficulty(game, difficulty);
 
-        client.chat(data.getGameId(), "Difficulty was set to " + difficulty.toString().toLowerCase());
+        client.chat(data.getGameId(), messageStore.getDifficultySetToMessage(game.getLanguageLocale(), difficulty));
     }
 
     private Difficulty parseDifficulty(CommandData data) {
-        Difficulty difficulty = null;
+        MessageStore messageStore = data.getMessageStore();
 
         String receivedData = data.getMessage().toLowerCase();
-        if (receivedData.endsWith("easy")) {
-            difficulty = nu.mrpi.wordfeudsolver.domain.Difficulty.EASY;
-        } else if (receivedData.endsWith("medium")) {
-            difficulty = nu.mrpi.wordfeudsolver.domain.Difficulty.MEDIUM;
-        } else if (receivedData.endsWith("hard")) {
-            difficulty = nu.mrpi.wordfeudsolver.domain.Difficulty.HARD;
-        } else if (receivedData.endsWith("nightmare")) {
-            difficulty = nu.mrpi.wordfeudsolver.domain.Difficulty.NIGHTMARE;
+        for (Difficulty difficulty : Difficulty.values()) {
+            if (receivedData.endsWith(messageStore.getLocalizedDifficulty(data.getGame().getLanguageLocale(), difficulty))) {
+                return difficulty;
+            }
         }
-        return difficulty;
+
+        return null;
     }
 
     public static Command forLevel(final Difficulty difficulty) {

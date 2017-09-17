@@ -41,8 +41,7 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
     public void doWork() {
         boolean noGamesWithMyTurn = true;
 
-        final Game[] games = wordFeudClient.getGames();
-        for (final Game game : games) {
+        for (final Game game : wordFeudClient.getGames()) {
             if (game.isMyTurn()) {
                 final Game gameWithTiles = wordFeudClient.getGame(game.getId());
                 final Board board = wordFeudClient.getBoard(gameWithTiles);

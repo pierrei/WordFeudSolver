@@ -1,5 +1,7 @@
 package nu.mrpi.wordfeudsolver.chat;
 
+import nu.mrpi.wordfeudsolver.domain.Difficulty;
+
 import static nu.mrpi.util.MathUtil.random;
 
 import java.io.UnsupportedEncodingException;
@@ -30,6 +32,18 @@ public class MessageStore {
 
     public String getGreeting(final Locale locale, final String username) {
         return getString(locale, "greeting.nightmare", username);
+    }
+
+    public String getLocalizedDifficulty(final Locale locale, final Difficulty difficulty) {
+        return getString(locale, "chat.command." + difficulty.toString().toLowerCase());
+    }
+
+    public String getDifficultySetToMessage(Locale locale, Difficulty difficulty) {
+        return getString(locale, "chat.response.difficulty_set", getLocalizedDifficulty(locale, difficulty));
+    }
+
+    public String getDifficultyLevelMessage(final Locale locale, Difficulty difficulty) {
+        return getString(locale, "chat.response.difficulty_level", getLocalizedDifficulty(locale, difficulty));
     }
 
     public static String getString(final Locale locale, final String key) {
