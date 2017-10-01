@@ -38,6 +38,7 @@ public class ChatWorker {
 
                 chatCommand.executeCommand(new CommandData(wordFeudClient, gameService, messageStore, gameId, fromUsername, message));
                 chatMessageProcessed = true;
+                break;
             }
         }
 
