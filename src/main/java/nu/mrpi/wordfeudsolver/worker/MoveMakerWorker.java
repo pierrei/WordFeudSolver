@@ -87,28 +87,34 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
 
         boolean solved = false;
         byte tries = 0;
-        for (final TileMove tileMove : solver.solve(gameWithTiles, board)) {
-            if (tries != TRY_LIMIT) {
-                logSolution(gameWithTiles, tileMove);
 
-                try {
-                    final int points = placeSolution(gameWithTiles, tileMove);
+        try {
+            List<TileMove> solutions = solver.solve(gameWithTiles, board);
+            for (final TileMove tileMove : solutions) {
+                if (tries != TRY_LIMIT) {
+                    logSolution(gameWithTiles, tileMove);
 
-                    actOnPoints(gameWithTiles, points);
-                    solved = true;
+                    try {
+                        final int points = placeSolution(gameWithTiles, tileMove);
+
+                        actOnPoints(gameWithTiles, points);
+                        solved = true;
+                        break;
+                    } catch (WordFeudException e) {
+                        log.warn(gameWithTiles, "Could not place solution (" + e.getMessage() + "). Trying the next one...");
+                        tries++;
+                    }
+                } else {
+                    log.warn(gameWithTiles, "Reached try limit of " + TRY_LIMIT + "; passing game!");
                     break;
-                } catch (WordFeudException e) {
-                    log.warn(gameWithTiles, "Could not place solution (" + e.getMessage() + "). Trying the next one...");
-                    tries++;
                 }
-            } else {
-                log.warn(gameWithTiles, "Reached try limit of " + TRY_LIMIT + "; passing game!");
-                break;
             }
-        }
 
-        if (!solved) {
-            giveUpTurn(gameWithTiles);
+            if (!solved) {
+                giveUpTurn(gameWithTiles);
+            }
+        } catch (Throwable e) {
+            log.error(gameWithTiles, "Could not solve game because of error", e);
         }
     }
 
