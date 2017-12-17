@@ -40,7 +40,7 @@ public class InvitationsWorker extends AbstractWorker implements Worker {
 
     private void acceptInvitation(final Invite invite) {
         log.info("Accepting invite from " + invite.getInviter());
-        final int gameId = wordFeudClient.acceptInvite(invite.getId());
+        final long gameId = wordFeudClient.acceptInvite(invite.getId());
         final Game game = wordFeudClient.getGame(gameId);
 
         log.info(game, "Sending greeting message to " + invite.getInviter());

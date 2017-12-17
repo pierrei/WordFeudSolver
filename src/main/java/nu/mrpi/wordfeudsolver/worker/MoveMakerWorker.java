@@ -1,6 +1,7 @@
 package nu.mrpi.wordfeudsolver.worker;
 
 import java.util.Arrays;
+import java.util.List;
 
 import nu.mrpi.wordfeudapi.WordFeudClient;
 import nu.mrpi.wordfeudapi.domain.Board;
@@ -12,7 +13,6 @@ import nu.mrpi.wordfeudapi.domain.Tile;
 import nu.mrpi.wordfeudapi.domain.TileMove;
 import nu.mrpi.wordfeudapi.exception.WordFeudException;
 import nu.mrpi.wordfeudsolver.chat.MessageStore;
-import nu.mrpi.wordfeudsolver.domain.Difficulty;
 import nu.mrpi.wordfeudsolver.domain.GameInfo;
 import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
 import nu.mrpi.wordfeudsolver.service.GameService;

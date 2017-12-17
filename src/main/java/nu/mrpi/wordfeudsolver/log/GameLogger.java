@@ -37,6 +37,22 @@ public class GameLogger {
         warn(game.getId(), logMessage);
     }
 
+    public void error(final long gameId, String logMessage) {
+        log.error(composeLogMessage(gameId, logMessage));
+    }
+
+    public void error(final Game game, String logMessage) {
+        error(game.getId(), logMessage);
+    }
+
+    public void error(final long gameId, String logMessage, Throwable t) {
+        log.error(composeLogMessage(gameId, logMessage), t);
+    }
+
+    public void error(final Game game, String logMessage, Throwable t) {
+        error(game.getId(), logMessage, t);
+    }
+
     private String composeLogMessage(long gameId, String logMessage) {
         return "[" + gameId + "] " + logMessage;
     }

@@ -10,5 +10,5 @@ import nu.mrpi.wordfeudapi.domain.TileMove;
  * @author Pierre Ingmansson
  */
 public interface Solver {
-    public List<TileMove> solve(Game game, Board board);
+    List<TileMove> solve(Game game, Board board);
 }

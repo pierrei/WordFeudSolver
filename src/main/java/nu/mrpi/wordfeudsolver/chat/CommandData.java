@@ -11,12 +11,12 @@ public class CommandData {
     private final WordFeudClient client;
     private final GameService gameService;
     private final MessageStore messageStore;
-    private final int gameId;
+    private final long gameId;
     private final String fromUsername;
     private final String message;
     private Game game = null;
 
-    public CommandData(final WordFeudClient client, GameService gameService, MessageStore messageStore, final int gameId, final String fromUsername, final String message) {
+    public CommandData(final WordFeudClient client, GameService gameService, MessageStore messageStore, final long gameId, final String fromUsername, final String message) {
         this.client = client;
         this.gameService = gameService;
         this.messageStore = messageStore;
@@ -37,7 +37,7 @@ public class CommandData {
         return messageStore;
     }
 
-    public int getGameId() {
+    public long getGameId() {
         return gameId;
     }
 

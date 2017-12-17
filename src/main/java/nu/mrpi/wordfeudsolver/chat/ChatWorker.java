@@ -28,7 +28,7 @@ public class ChatWorker {
         this.messageStore = messageStore;
     }
 
-    public void processChatMessage(final int gameId, final String fromUsername, final String message) {
+    public void processChatMessage(final long gameId, final String fromUsername, final String message) {
         boolean chatMessageProcessed = false;
         Game game = wordFeudClient.getGame(gameId);
 
