@@ -44,7 +44,7 @@ public class WordFeudSolverMain {
     private static WorkManager createGameWorker() {
         settingsService = new SettingsService();
 
-        final GameDAO gameDAO = new GameDAORedis();
+        final GameDAO gameDAO = new GameDAORedis(settingsService);
         final GameService gameService = new GameService(gameDAO);
         final MessageStore messageStore = new MessageStore();
 

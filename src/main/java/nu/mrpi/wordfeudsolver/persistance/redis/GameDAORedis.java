@@ -3,6 +3,7 @@ package nu.mrpi.wordfeudsolver.persistance.redis;
 import nu.mrpi.wordfeudsolver.domain.GameInfo;
 import nu.mrpi.wordfeudsolver.persistance.GameDAO;
 import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
+import nu.mrpi.wordfeudsolver.service.SettingsService;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -13,8 +14,8 @@ public class GameDAORedis implements GameDAO {
 
     private Jedis jedis;
 
-    public GameDAORedis() {
-        jedis = new Jedis("localhost");
+    public GameDAORedis(SettingsService settingsService) {
+        jedis = new Jedis(settingsService.getRedisHost(), settingsService.getRedisPort());
     }
 
     @Override

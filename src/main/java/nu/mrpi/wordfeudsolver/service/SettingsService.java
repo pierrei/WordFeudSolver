@@ -65,4 +65,12 @@ public class SettingsService {
     public boolean shouldSendBragMessages() {
         return config.getBoolean("sendBragMessages");
     }
+
+    public String getRedisHost() {
+        return config.getString("redis.host");
+    }
+
+    public int getRedisPort() {
+        return config.getInt("redis.port");
+    }
 }

@@ -2,12 +2,14 @@ package nu.mrpi.wordfeudsolver.persistance.redis;
 
 import static org.junit.Assert.assertEquals;
 
+import nu.mrpi.wordfeudsolver.service.SettingsService;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import nu.mrpi.wordfeudsolver.domain.Difficulty;
 import nu.mrpi.wordfeudsolver.domain.GameInfo;
+import org.mockito.Mockito;
 
 /**
  * @author Pierre Ingmansson
@@ -18,7 +20,7 @@ public class GameDAORedisTest {
 
     @Before
     public void setUp() throws Exception {
-        gameDAORedis = new GameDAORedis();
+        gameDAORedis = new GameDAORedis(Mockito.mock(SettingsService.class));
     }
 
     @Test
