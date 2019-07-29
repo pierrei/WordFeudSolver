@@ -34,7 +34,8 @@ public class AccountWorker extends AbstractWorker implements Worker {
 
         workers = Arrays.asList(new InvitationsWorker(client, calculator, messageStore),
                                 new NotificationsWorker(client, chatWorker),
-                                new MoveMakerWorker(client, solver, messageStore, gameService, settingsService));
+                                new MoveMakerWorker(client, solver, messageStore, gameService, settingsService),
+                                new EndGameWorker(client, gameService));
     }
 
     @Override

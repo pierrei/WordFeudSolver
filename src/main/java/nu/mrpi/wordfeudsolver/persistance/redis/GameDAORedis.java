@@ -3,6 +3,7 @@ package nu.mrpi.wordfeudsolver.persistance.redis;
 import java.util.List;
 import java.util.stream.Collectors;
 import nu.mrpi.wordfeudsolver.domain.GameInfo;
+import nu.mrpi.wordfeudsolver.domain.PlayerStats;
 import nu.mrpi.wordfeudsolver.persistance.GameDAO;
 import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
 import nu.mrpi.wordfeudsolver.service.SettingsService;
@@ -14,6 +15,7 @@ import redis.clients.jedis.Jedis;
 public class GameDAORedis implements GameDAO {
 
   private static final String GAME_INFO_PREFIX = "gameinfo.";
+  private static final String PLAYER_STATS_PREFIX = "playerstats.";
 
   private Jedis jedis;
 
@@ -45,5 +47,10 @@ public class GameDAORedis implements GameDAO {
         .stream()
         .map(key -> GameInfo.fromJson(jedis.get(key)))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public void updatePlayerStats(final PlayerStats playerStats) {
+    jedis.set(PLAYER_STATS_PREFIX + playerStats.player(), playerStats.toJson());
   }
 }

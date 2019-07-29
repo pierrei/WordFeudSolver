@@ -29,14 +29,14 @@ public class StatsBuilderMain {
 
     final Map<String, PlayerStats> playerStatsMap = buildStats(allGameInfos);
 
-    System.out.println(playerStatsMap);
+    playerStatsMap.forEach((s, playerStats) -> gameDAO.updatePlayerStats(playerStats));
   }
 
   private static Map<String, PlayerStats> buildStats(final List<GameInfo> allGameInfos) {
     Map<String, PlayerStats> allPlayerStats = new HashMap<>();
 
     for (GameInfo gameInfo : allGameInfos) {
-      if (!gameInfo.isDifficultySet()) {
+      if (!gameInfo.isDifficultySet() || !gameInfo.isGameOver()) {
         continue;
       }
       LOG.info("Processing " + gameInfo);

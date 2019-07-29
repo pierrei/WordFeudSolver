@@ -2,6 +2,8 @@ package nu.mrpi.wordfeudsolver.domain;
 
 import com.google.gson.Gson;
 
+import java.util.Objects;
+import nu.mrpi.wordfeudapi.domain.EndGame;
 import nu.mrpi.wordfeudapi.domain.Game;
 
 /**
@@ -14,6 +16,7 @@ public class GameInfo {
     private int opponentScore;
     private long gameId;
     private boolean surrender = false;
+    private EndGame endGame;
 
     public GameInfo() {
     }
@@ -27,6 +30,7 @@ public class GameInfo {
         botScore = game.getMe().getScore();
         opponentScore = game.getOpponent().getScore();
         gameId = game.getId();
+        endGame = game.getEndGame();
     }
 
     public Difficulty getDifficulty() {
@@ -81,6 +85,18 @@ public class GameInfo {
         this.surrender = surrender;
     }
 
+    public EndGame getEndGame() {
+        return endGame;
+    }
+
+    public void setEndGame(final EndGame endGame) {
+        this.endGame = endGame;
+    }
+
+    public boolean isGameOver() {
+        return endGame != null && endGame != EndGame.NotOver;
+    }
+
     public static GameInfo fromJson(final String json) {
         return new Gson().fromJson(json, GameInfo.class);
     }
@@ -90,30 +106,27 @@ public class GameInfo {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GameInfo gameInfo = (GameInfo) o;
-
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final GameInfo gameInfo = (GameInfo) o;
         return botScore == gameInfo.botScore &&
-                gameId == gameInfo.gameId &&
-                opponentScore == gameInfo.opponentScore &&
-                difficulty == gameInfo.difficulty &&
-                surrender == gameInfo.surrender &&
-                opponent.equals(gameInfo.opponent);
-
+               opponentScore == gameInfo.opponentScore &&
+               gameId == gameInfo.gameId &&
+               surrender == gameInfo.surrender &&
+               difficulty == gameInfo.difficulty &&
+               Objects.equals(opponent, gameInfo.opponent) &&
+               endGame == gameInfo.endGame;
     }
 
     @Override
     public int hashCode() {
-        int result = difficulty.hashCode();
-        result = 31 * result + opponent.hashCode();
-        result = 31 * result + botScore;
-        result = 31 * result + opponentScore;
-        result = 31 * result + (int) (gameId ^ (gameId >>> 32));
-        result = 31 * result + (surrender ? 1 : 0);
-        return result;
+        return Objects
+            .hash(difficulty, opponent, botScore, opponentScore, gameId, surrender, endGame);
     }
 
     @Override
@@ -125,6 +138,7 @@ public class GameInfo {
                ", opponentScore=" + opponentScore +
                ", gameId=" + gameId +
                ", surrender=" + surrender +
+               ", endGame=" + endGame +
                '}';
     }
 }
