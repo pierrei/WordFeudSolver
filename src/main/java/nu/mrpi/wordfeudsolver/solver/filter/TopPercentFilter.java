@@ -17,8 +17,6 @@ public class TopPercentFilter implements TileMoveFilter {
     @Override
     public List<TileMove> filter(List<TileMove> tileMoves) {
         double multiplier = ((double) topPercent) / 100.0;
-        tileMoves = tileMoves.subList(0, (int) Math.ceil(((double) tileMoves.size()) * multiplier));
-
-        return tileMoves;
+        return tileMoves.subList(0, (int) Math.ceil(((double) tileMoves.size()) * multiplier));
     }
 }

@@ -18,19 +18,8 @@ public class PointLimitFilter implements TileMoveFilter {
 
     @Override
     public List<TileMove> filter(List<TileMove> tileMoves) {
-        tileMoves = new ArrayList<>(tileMoves);
-        removeSolutionsExceedingPointLimit(tileMoves);
+        tileMoves.removeIf(tileMove -> tileMove.getPoints() > pointMaxLimit);
 
         return tileMoves;
-    }
-
-    private void removeSolutionsExceedingPointLimit(List<TileMove> solutions) {
-        Iterator<TileMove> tileMoveIterator = solutions.iterator();
-        while (tileMoveIterator.hasNext()) {
-            TileMove tileMove = tileMoveIterator.next();
-            if (tileMove.getPoints() > pointMaxLimit) {
-                tileMoveIterator.remove();
-            }
-        }
     }
 }

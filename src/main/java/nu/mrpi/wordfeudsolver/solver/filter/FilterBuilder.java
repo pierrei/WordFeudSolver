@@ -16,12 +16,8 @@ import nu.mrpi.wordfeudsolver.solver.calculator.WFCalculator;
 public class FilterBuilder {
 
     public static OngoingSolverBuilder solver(final WFCalculator calculator) {
-        return new OngoingSolverBuilder(new Solver() {
-            @Override
-            public List<TileMove> solve(Game game, Board board) {
-                return new ArrayList<>(calculator.findSolutions(game, board));
-            }
-        });
+        return new OngoingSolverBuilder(
+            (game, board) -> new ArrayList<>(calculator.findSolutions(game, board)));
     }
 
     public static OngoingSolverBuilder solver(final Solver rootSolver) {
@@ -48,6 +44,11 @@ public class FilterBuilder {
 
         public OngoingSolverBuilder pointLimit(int pointLimit) {
             filters.add(new PointLimitFilter(pointLimit));
+            return this;
+        }
+
+        public OngoingSolverBuilder length(boolean shortestFirst) {
+            filters.add(new LengthFilter(shortestFirst));
             return this;
         }
 

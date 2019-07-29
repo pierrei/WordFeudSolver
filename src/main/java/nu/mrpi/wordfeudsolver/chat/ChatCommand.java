@@ -108,19 +108,16 @@ public enum ChatCommand {
         }
     }),
 
-    Surrender(true, new Command() {
-        @Override
-        public void executeCommand(CommandData data) {
-            data.getGameService().surrender(data.getGame());
-        }
-    }),
+    Surrender(true, data -> { data.getGameService().surrender(data.getGame()); }),
 
     Difficulty(false, new DifficultyCommand()),
 
     Easy(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.EASY)),
     Medium(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.MEDIUM)),
     Hard(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.HARD)),
-    Nightmare(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.NIGHTMARE));
+    Nightmare(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.NIGHTMARE)),
+    Shortest(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.SHORTEST)),
+    Longest(false, DifficultyCommand.forLevel(nu.mrpi.wordfeudsolver.domain.Difficulty.LONGEST));
 
     private final boolean adminCommand;
     private final Command command;

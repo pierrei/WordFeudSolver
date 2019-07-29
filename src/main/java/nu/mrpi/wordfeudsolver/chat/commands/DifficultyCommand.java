@@ -32,7 +32,7 @@ public class DifficultyCommand implements Command {
         }
     }
 
-    protected void setDifficulty(CommandData data, Difficulty difficulty) {
+    void setDifficulty(CommandData data, Difficulty difficulty) {
         WordFeudClient client = data.getClient();
         Game game = data.getGame();
         MessageStore messageStore = data.getMessageStore();
