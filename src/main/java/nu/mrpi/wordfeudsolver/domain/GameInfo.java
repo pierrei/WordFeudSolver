@@ -115,4 +115,16 @@ public class GameInfo {
         result = 31 * result + (surrender ? 1 : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "GameInfo{" +
+               "difficulty=" + difficulty +
+               ", opponent='" + opponent + '\'' +
+               ", botScore=" + botScore +
+               ", opponentScore=" + opponentScore +
+               ", gameId=" + gameId +
+               ", surrender=" + surrender +
+               '}';
+    }
 }

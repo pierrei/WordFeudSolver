@@ -78,6 +78,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>io.norberg</groupId>
+            <artifactId>auto-matter</artifactId>
+            <version>0.15.2</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
