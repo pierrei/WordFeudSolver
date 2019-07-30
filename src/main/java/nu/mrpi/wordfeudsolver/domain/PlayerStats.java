@@ -11,7 +11,7 @@ public interface PlayerStats {
 
   Map<Difficulty, DifficultyStats> gameStats();
 
-  public static PlayerStats fromJson(final String json) {
+  static PlayerStats fromJson(final String json) {
     return GsonUtil.gson().fromJson(json, PlayerStats.class);
   }
 

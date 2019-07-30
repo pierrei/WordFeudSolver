@@ -77,6 +77,10 @@ public class GameService {
 
     }
 
+    public PlayerStats getPlayerStats(final String player) throws PlayerNotFoundException {
+        return gameDAO.getPlayerStats(player);
+    }
+
     public GameInfo getGameInfo(long gameId) throws GameNotFoundException {
         return gameDAO.getGameInfo(gameId);
     }

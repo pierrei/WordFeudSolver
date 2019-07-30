@@ -1,25 +1,31 @@
 package nu.mrpi.wordfeudsolver.chat;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import nu.mrpi.wordfeudapi.WordFeudClient;
 import nu.mrpi.wordfeudapi.domain.BoardType;
 import nu.mrpi.wordfeudapi.domain.Game;
 import nu.mrpi.wordfeudapi.domain.RuleSet;
 import nu.mrpi.wordfeudsolver.chat.commands.DifficultyCommand;
+import nu.mrpi.wordfeudsolver.domain.DifficultyStats;
+import nu.mrpi.wordfeudsolver.domain.PlayerStats;
+import nu.mrpi.wordfeudsolver.persistance.PlayerNotFoundException;
+import nu.mrpi.wordfeudsolver.service.GameService;
 
 /**
  * @author Pierre Ingmansson
  */
 public enum ChatCommand {
-    Help(false, new Command() {
-        @Override
-        public void executeCommand(CommandData data) {
-            WordFeudClient client = data.getClient();
-            MessageStore messageStore = data.getMessageStore();
+    Help(false, data -> {
+        WordFeudClient client = data.getClient();
+        MessageStore messageStore = data.getMessageStore();
 
-            Game game = data.getClient().getGame(data.getGameId());
+        Game game = data.getClient().getGame(data.getGameId());
 
-            client.chat(data.getGameId(), messageStore.getHelp(game.getLanguageLocale()));
-        }
+        client.chat(data.getGameId(), messageStore.getHelp(game.getLanguageLocale()));
     }),
     Status(true, new Command() {
         public void executeCommand(final CommandData data) {
@@ -37,7 +43,7 @@ public enum ChatCommand {
             int gamesInLead = 0;
             int finishedGames = 0;
             int gamesLost = 0;
-            String lostTo = "";
+            StringBuilder lostTo = new StringBuilder();
 
             for (final Game game : games) {
                 if (game.isRunning()) {
@@ -53,9 +59,9 @@ public enum ChatCommand {
                         gamesLost++;
 
                         if (lostTo.length() > 0) {
-                            lostTo += ", " + game.getOpponentName();
+                            lostTo.append(", ").append(game.getOpponentName());
                         } else {
-                            lostTo += game.getOpponentName();
+                            lostTo.append(game.getOpponentName());
                         }
                     }
                 }
@@ -72,6 +78,29 @@ public enum ChatCommand {
             status.append(".");
 
             return status.toString();
+        }
+    }),
+
+    Statistics(false, data -> {
+        final Game game = data.getGame();
+        final Locale locale = game.getLanguageLocale();
+        final GameService gameService = data.getGameService();
+        final WordFeudClient client = data.getClient();
+        final MessageStore messageStore = data.getMessageStore();
+
+        try {
+            final PlayerStats playerStats = gameService.getPlayerStats(data.getFromUsername());
+
+            client.chat(game, messageStore.getStatsInfoMessage(locale));
+
+            final List<DifficultyStats> difficultyStats = new ArrayList<>(playerStats.gameStats().values());
+            Collections.sort(difficultyStats);
+
+            for (DifficultyStats difficultyStat : difficultyStats) {
+                client.chat(game, messageStore.getDifficultyStats(locale, difficultyStat));
+            }
+        } catch (PlayerNotFoundException e) {
+            client.chat(game, messageStore.getNoStatsFound(locale));
         }
     }),
 

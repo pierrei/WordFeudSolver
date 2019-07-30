@@ -1,5 +1,6 @@
 package nu.mrpi.wordfeudsolver.chat;
 
+import java.nio.charset.StandardCharsets;
 import nu.mrpi.wordfeudsolver.domain.Difficulty;
 
 import static nu.mrpi.util.MathUtil.random;
@@ -9,6 +10,9 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import nu.mrpi.wordfeudsolver.domain.DifficultyStats;
+import nu.mrpi.wordfeudsolver.domain.PlayerStats;
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -50,12 +54,29 @@ public class MessageStore {
         return getString(locale, "chat.response.difficulty_level", getLocalizedDifficulty(locale, difficulty));
     }
 
+    public String getNoStatsFound(final Locale locale) {
+        return getString(locale, "chat.stats.not_found");
+    }
+
+    public String getStatsInfoMessage(final Locale locale) {
+        return getString(locale, "chat.stats.info");
+    }
+
+    public String getDifficultyStats(final Locale locale, final DifficultyStats difficultyStats) {
+        final String capitalizedDifficulty =
+            StringUtils.capitalize(getLocalizedDifficulty(locale, difficultyStats.difficulty()));
+        return getString(locale,
+            "chat.stats.difficulty",
+            capitalizedDifficulty,
+            difficultyStats.wins(),
+            difficultyStats.losses());
+    }
+
     public static String getString(final Locale locale, final String key) {
-        try {
-            return new String(ResourceBundle.getBundle(BUNDLE, locale).getString(key).getBytes("ISO-8859-1"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return ResourceBundle.getBundle(BUNDLE, locale).getString(key);
-        }
+        return new String(ResourceBundle
+            .getBundle(BUNDLE, locale)
+            .getString(key)
+            .getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
     }
 
     public static String getString(final Locale locale, final String key, final Object... params) {
@@ -65,4 +86,5 @@ public class MessageStore {
             return '!' + key + '!';
         }
     }
+
 }
