@@ -65,11 +65,38 @@ public class MessageStore {
     public String getDifficultyStats(final Locale locale, final DifficultyStats difficultyStats) {
         final String capitalizedDifficulty =
             StringUtils.capitalize(getLocalizedDifficulty(locale, difficultyStats.difficulty()));
+
+        if (difficultyStats.wins() == 0 && difficultyStats.losses() > 0) {
+            return getString(locale,
+                "chat.stats.difficulty_losses_only",
+                capitalizedDifficulty,
+                difficultyStats.losses(),
+                difficultyStats.ties(),
+                difficultyStats.maxLoss(),
+                difficultyStats.minLoss()
+                );
+        } else if (difficultyStats.losses() == 0 && difficultyStats.wins() > 0) {
+            return getString(locale,
+                "chat.stats.difficulty_wins_only",
+                capitalizedDifficulty,
+                difficultyStats.wins(),
+                difficultyStats.ties(),
+                difficultyStats.maxWin(),
+                difficultyStats.minWin()
+                );
+        }
+
         return getString(locale,
-            "chat.stats.difficulty",
+            "chat.stats.difficulty_both",
             capitalizedDifficulty,
             difficultyStats.wins(),
-            difficultyStats.losses());
+            difficultyStats.losses(),
+            difficultyStats.ties(),
+            difficultyStats.maxWin(),
+            difficultyStats.minWin(),
+            difficultyStats.maxLoss(),
+            difficultyStats.minLoss()
+            );
     }
 
     public static String getString(final Locale locale, final String key) {

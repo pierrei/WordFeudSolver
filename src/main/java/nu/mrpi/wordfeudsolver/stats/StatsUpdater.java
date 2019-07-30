@@ -22,7 +22,9 @@ public class StatsUpdater {
           .minWin(Integer.MAX_VALUE)
           .maxWin(0)
           .wins(0)
-          .losses(0)).build();
+          .losses(0)
+          .ties(0))
+          .build();
     } else {
       difficultyStats =
           addOneMoreStat(gameInfo, playerStats.gameStats().get(gameInfo.getDifficulty()));
@@ -44,7 +46,9 @@ public class StatsUpdater {
 
   private static DifficultyStatsBuilder updateWithNewGameInfo(final GameInfo gameInfo,
                                                               final DifficultyStatsBuilder difficultyStatsBuilder) {
-    if (gameInfo.getBotScore() > gameInfo.getOpponentScore()) {
+    if (gameInfo.getBotScore() == gameInfo.getOpponentScore()) {
+      difficultyStatsBuilder.ties(difficultyStatsBuilder.ties() + 1);
+    } else if (gameInfo.getBotScore() > gameInfo.getOpponentScore()) {
       difficultyStatsBuilder.losses(difficultyStatsBuilder.losses() + 1);
 
       final int lossMargin = gameInfo.getBotScore() - gameInfo.getOpponentScore();

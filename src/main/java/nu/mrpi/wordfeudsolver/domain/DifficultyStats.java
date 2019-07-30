@@ -7,6 +7,7 @@ public interface DifficultyStats extends Comparable<DifficultyStats> {
   Difficulty difficulty();
   int wins();
   int losses();
+  int ties();
   int maxWin();
   int minWin();
   int maxLoss();
