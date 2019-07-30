@@ -1,10 +1,15 @@
 package nu.mrpi.wordfeudsolver.service;
 
+import java.util.Collections;
 import nu.mrpi.wordfeudapi.domain.Game;
 import nu.mrpi.wordfeudsolver.domain.Difficulty;
 import nu.mrpi.wordfeudsolver.domain.GameInfo;
+import nu.mrpi.wordfeudsolver.domain.PlayerStats;
+import nu.mrpi.wordfeudsolver.domain.PlayerStatsBuilder;
 import nu.mrpi.wordfeudsolver.persistance.GameDAO;
 import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
+import nu.mrpi.wordfeudsolver.persistance.PlayerNotFoundException;
+import nu.mrpi.wordfeudsolver.stats.StatsUpdater;
 
 /**
  * @author Pierre Ingmansson
@@ -55,6 +60,21 @@ public class GameService {
         }
 
         gameDAO.updateGameInfo(gameInfo);
+    }
+
+    public void addGameToPlayerStats(final GameInfo gameInfo) {
+        PlayerStats playerStats;
+        try {
+            playerStats = gameDAO.getPlayerStats(gameInfo.getOpponent());
+
+        } catch (PlayerNotFoundException e) {
+            playerStats = new PlayerStatsBuilder()
+                .player(gameInfo.getOpponent())
+                .gameStats(Collections.emptyMap())
+                .build();
+        }
+        gameDAO.updatePlayerStats(StatsUpdater.addGameToPlayerStats(gameInfo, playerStats));
+
     }
 
     public GameInfo getGameInfo(long gameId) throws GameNotFoundException {

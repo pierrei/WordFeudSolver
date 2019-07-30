@@ -1,10 +1,9 @@
 package nu.mrpi.wordfeudsolver.domain;
 
-import com.google.gson.Gson;
-
 import java.util.Objects;
 import nu.mrpi.wordfeudapi.domain.EndGame;
 import nu.mrpi.wordfeudapi.domain.Game;
+import nu.mrpi.wordfeudsolver.GsonUtil;
 
 /**
  * @author Pierre Ingmansson
@@ -98,11 +97,11 @@ public class GameInfo {
     }
 
     public static GameInfo fromJson(final String json) {
-        return new Gson().fromJson(json, GameInfo.class);
+        return GsonUtil.gson().fromJson(json, GameInfo.class);
     }
 
     public String toJson() {
-        return new Gson().toJson(this);
+        return GsonUtil.gson().toJson(this);
     }
 
     @Override

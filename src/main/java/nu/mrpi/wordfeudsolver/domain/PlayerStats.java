@@ -1,8 +1,8 @@
 package nu.mrpi.wordfeudsolver.domain;
 
-import com.google.gson.Gson;
 import io.norberg.automatter.AutoMatter;
 import java.util.Map;
+import nu.mrpi.wordfeudsolver.GsonUtil;
 
 @AutoMatter
 public interface PlayerStats {
@@ -12,11 +12,11 @@ public interface PlayerStats {
   Map<Difficulty, DifficultyStats> gameStats();
 
   public static PlayerStats fromJson(final String json) {
-    return new Gson().fromJson(json, PlayerStats.class);
+    return GsonUtil.gson().fromJson(json, PlayerStats.class);
   }
 
   default String toJson() {
-    return new Gson().toJson(this);
+    return GsonUtil.gson().toJson(this);
   }
 
 }

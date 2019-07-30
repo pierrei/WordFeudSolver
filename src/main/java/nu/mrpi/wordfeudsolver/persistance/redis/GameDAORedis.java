@@ -6,6 +6,7 @@ import nu.mrpi.wordfeudsolver.domain.GameInfo;
 import nu.mrpi.wordfeudsolver.domain.PlayerStats;
 import nu.mrpi.wordfeudsolver.persistance.GameDAO;
 import nu.mrpi.wordfeudsolver.persistance.GameNotFoundException;
+import nu.mrpi.wordfeudsolver.persistance.PlayerNotFoundException;
 import nu.mrpi.wordfeudsolver.service.SettingsService;
 import redis.clients.jedis.Jedis;
 
@@ -52,5 +53,14 @@ public class GameDAORedis implements GameDAO {
   @Override
   public void updatePlayerStats(final PlayerStats playerStats) {
     jedis.set(PLAYER_STATS_PREFIX + playerStats.player(), playerStats.toJson());
+  }
+
+  @Override
+  public PlayerStats getPlayerStats(final String playerName) throws PlayerNotFoundException {
+    final String json = jedis.get(PLAYER_STATS_PREFIX + playerName);
+    if (json == null) {
+      throw new PlayerNotFoundException();
+    }
+    return PlayerStats.fromJson(json);
   }
 }

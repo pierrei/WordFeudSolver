@@ -15,4 +15,6 @@ public interface GameDAO {
     List<GameInfo> getAllGameInfos();
 
     void updatePlayerStats(final PlayerStats playerStats);
+
+    PlayerStats getPlayerStats(String playerName) throws PlayerNotFoundException;
 }

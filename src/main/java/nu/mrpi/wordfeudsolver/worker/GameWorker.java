@@ -22,7 +22,7 @@ import nu.mrpi.wordfeudsolver.solver.Solver;
 /**
  *
  */
-public class MoveMakerWorker extends AbstractWorker implements Worker{
+public class GameWorker extends AbstractWorker implements Worker{
     private static final byte TRY_LIMIT = 10;
     private static final int POINT_BRAG_LIMIT = 70;
 
@@ -32,7 +32,7 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
     private final GameService gameService;
     private final SettingsService settingsService;
 
-    public MoveMakerWorker(WordFeudClient wordFeudClient, Solver solver, MessageStore messageStore, GameService gameService, SettingsService settingsService) {
+    public GameWorker(WordFeudClient wordFeudClient, Solver solver, MessageStore messageStore, GameService gameService, SettingsService settingsService) {
         this.wordFeudClient = wordFeudClient;
         this.solver = solver;
         this.messageStore = messageStore;
@@ -45,19 +45,28 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
         boolean noGamesWithMyTurn = true;
 
         for (final Game game : wordFeudClient.getGames()) {
-            GameInfo gameInfo = getGameInfo(game);
+            try {
+                GameInfo gameInfo = gameService.getGameInfo(game);
 
-            if (game.isMyTurn() && (gameInfo != null && gameInfo.isDifficultySet())) {
-                if (gameInfo.isSurrender()) {
-                    giveUp(game);
-                } else {
-                    final Game gameWithTiles = wordFeudClient.getGame(game.getId());
-                    final Board board = wordFeudClient.getBoard(gameWithTiles);
+                if (game.isMyTurn() && gameInfo.isDifficultySet()) {
+                    if (gameInfo.isSurrender()) {
+                        giveUp(game);
+                    } else {
+                        final Game gameWithTiles = wordFeudClient.getGame(game.getId());
+                        final Board board = wordFeudClient.getBoard(gameWithTiles);
 
-                    findAndPlaceSolution(gameWithTiles, board);
+                        findAndPlaceSolution(gameWithTiles, board);
 
-                    noGamesWithMyTurn = false;
+                        noGamesWithMyTurn = false;
+                    }
                 }
+
+                if (gameInfo.getEndGame() != game.getEndGame() && game.isGameOver()) {
+                    gameInfo.update(game);
+                    gameService.addGameToPlayerStats(gameInfo);
+                }
+            } catch (GameNotFoundException e) {
+                // Ignore
             }
 
             gameService.storeGameInfo(game);
@@ -66,15 +75,6 @@ public class MoveMakerWorker extends AbstractWorker implements Worker{
         if (noGamesWithMyTurn) {
             log.debug("No games found where it's my turn");
         }
-    }
-
-    private GameInfo getGameInfo(Game game) {
-        GameInfo gameInfo = null;
-        try {
-            gameInfo = gameService.getGameInfo(game);
-        } catch (GameNotFoundException ignored) {
-        }
-        return gameInfo;
     }
 
     private void giveUp(Game game) {
